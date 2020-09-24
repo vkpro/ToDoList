@@ -1,18 +1,22 @@
 import * as React from "react";
+
+import TasksList from "./TasksList";
+import AddTask from "./AddTask";
+
 import "./styles.css";
-import Button from "@material-ui/core/Button";
 
 export default function App() {
+  const [tasks, setTasks] = React.useState<Array<string>>([
+    "Task 11",
+    "Task 2",
+    "Task 3"
+  ]);
+
   return (
     <div className="App">
       <h1>ToDo List</h1>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => console.log("Clicked")}
-      >
-        Material Button
-      </Button>
+      <AddTask />
+      <TasksList tasks={tasks} />
     </div>
   );
 }
