@@ -1,44 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
+    root: {
+      margin: theme.spacing(1),
       display: "flex",
       alignItems: "flex-end",
       justifyContent: "center"
-    },
-    root: {
-      "& > *": {
-        margin: theme.spacing(1),
-        width: "25ch"
-      }
     }
   })
 );
 
-export default function BasicTextFields() {
+const AddTask: React.FC<{ handleAddTask: any }> = ({ handleAddTask }) => {
   const classes = useStyles();
+  const [taskName, setTaskName] = useState("");
 
-  const handleAddTask = () => {
-    console.log("Added");
+  const handleTaskChange = (e: any) => {
+    setTaskName(e.target.value);
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    handleAddTask(taskName);
+    setTaskName("");
   };
 
   return (
-    <div className={classes.container}>
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField id="standard-basic" label="Add task" />
-      </form>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleAddTask()}
-        size={"small"}
+    <>
+      <form
+        className={classes.root}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
       >
-        Add task
-      </Button>
-    </div>
+        <Input
+          placeholder="Add task"
+          inputProps={{ "aria-label": "description" }}
+          value={taskName}
+          onChange={handleTaskChange}
+        />
+        <Button
+          style={{ marginLeft: "10px" }}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size={"small"}
+        >
+          +
+        </Button>
+      </form>
+    </>
   );
-}
+};
+
+export default AddTask;

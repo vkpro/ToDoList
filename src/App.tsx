@@ -6,16 +6,16 @@ import AddTask from "./AddTask";
 import "./styles.css";
 
 export default function App() {
-  const [tasks, setTasks] = React.useState<Array<string>>([
-    "Task 11",
-    "Task 2",
-    "Task 3"
-  ]);
+  const [tasks, setTasks] = React.useState<Array<string>>(["Create React App"]);
+
+  const addTask = (taskName: string) => {
+    setTasks([...tasks, taskName]);
+  };
 
   return (
     <div className="App">
-      <h1>ToDo List</h1>
-      <AddTask />
+      <h1>Task List</h1>
+      <AddTask handleAddTask={addTask} />
       <TasksList tasks={tasks} />
     </div>
   );

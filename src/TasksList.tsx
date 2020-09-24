@@ -26,7 +26,6 @@ const TasksList: React.FC<TasksListProps> = ({ tasks }) => {
   const [checked, setChecked] = React.useState<Array<string>>([]);
 
   const handleToggle = (value: string) => () => {
-    console.log(checked);
     const currentIndex = checked.indexOf(value as string);
     const newChecked = [...checked];
 
@@ -41,12 +40,12 @@ const TasksList: React.FC<TasksListProps> = ({ tasks }) => {
 
   return (
     <List className={classes.root}>
-      {tasks.map((value) => {
+      {tasks.map((value, index) => {
         const labelId = `checkbox-list-label-${value}`;
 
         return (
           <ListItem
-            key={value}
+            key={`${index}-${value}`}
             role={undefined}
             dense
             button
