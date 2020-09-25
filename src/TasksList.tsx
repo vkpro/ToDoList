@@ -1,18 +1,26 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Checkbox from "@material-ui/core/Checkbox";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginLeft: "5%",
+      marginTop: "10px",
+      marginLeft: "auto",
+      marginRight: "auto",
       width: "100%",
-      maxWidth: 360,
+      maxWidth: 460,
       backgroundColor: theme.palette.background.paper
+    },
+    completedTask: {
+      textDecoration: "line-through"
     }
   })
 );
@@ -53,14 +61,27 @@ const TasksList: React.FC<TasksListProps> = ({ tasks }) => {
           >
             <ListItemIcon>
               <Checkbox
-                edge="start"
                 checked={checked.indexOf(value) !== -1}
                 tabIndex={-1}
                 disableRipple
                 inputProps={{ "aria-labelledby": labelId }}
+                color="primary"
               />
             </ListItemIcon>
-            <ListItemText id={labelId} primary={value} />
+            <ListItemText
+              id={labelId}
+              primary={value}
+              style={
+                checked.indexOf(value) !== -1
+                  ? { textDecoration: "line-through" }
+                  : { textDecoration: "none" }
+              }
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         );
       })}

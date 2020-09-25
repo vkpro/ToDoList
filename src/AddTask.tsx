@@ -18,11 +18,11 @@ const AddTask: React.FC<{ handleAddTask: any }> = ({ handleAddTask }) => {
   const classes = useStyles();
   const [taskName, setTaskName] = useState("");
 
-  const handleTaskChange = (e: any) => {
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setTaskName(e.target.value);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     handleAddTask(taskName);
     setTaskName("");
