@@ -12,11 +12,15 @@ export default function App() {
     setTasks([...tasks, taskName]);
   };
 
+  const deleteTask = (taskName: string) => {
+    setTasks(tasks.filter((task) => task !== taskName));
+  };
+
   return (
     <div className="App">
       <h1>Task List</h1>
       <AddTask handleAddTask={addTask} />
-      <TasksList tasks={tasks} />
+      <TasksList tasks={tasks} handleDeleteTask={deleteTask} />
     </div>
   );
 }

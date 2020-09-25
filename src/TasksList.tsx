@@ -27,9 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type TasksListProps = {
   tasks: string[];
+  handleDeleteTask: Function;
 };
 
-const TasksList: React.FC<TasksListProps> = ({ tasks }) => {
+const TasksList: React.FC<TasksListProps> = ({ tasks, handleDeleteTask }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState<Array<string>>([]);
 
@@ -78,7 +79,11 @@ const TasksList: React.FC<TasksListProps> = ({ tasks }) => {
               }
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete">
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleDeleteTask(value)}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

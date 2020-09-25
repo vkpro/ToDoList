@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AddTask: React.FC<{ handleAddTask: any }> = ({ handleAddTask }) => {
+const AddTask: React.FC<{ handleAddTask: Function }> = ({ handleAddTask }) => {
   const classes = useStyles();
   const [taskName, setTaskName] = useState("");
 
