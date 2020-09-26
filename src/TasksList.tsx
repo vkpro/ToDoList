@@ -34,7 +34,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, handleDeleteTask }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState<Array<string>>([]);
 
-  const handleToggle = (value: string) => () => {
+  const handleToggle = (value: string) => {
     const currentIndex = checked.indexOf(value as string);
     const newChecked = [...checked];
 
@@ -49,47 +49,52 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, handleDeleteTask }) => {
 
   return (
     <List className={classes.root}>
-      {tasks.map((value, index) => {
-        const labelId = `checkbox-list-label-${value}`;
+      {!tasks.length
+        ? "No tasks"
+        : tasks.map((value, index) => {
+            const labelId = `checkbox-list-label-${value}`;
 
-        return (
-          <ListItem
-            key={`${index}-${value}`}
-            role={undefined}
-            dense
-            button
-            onClick={handleToggle(value)}
-          >
-            <ListItemIcon>
-              <Checkbox
-                checked={checked.indexOf(value) !== -1}
-                tabIndex={-1}
-                disableRipple
-                inputProps={{ "aria-labelledby": labelId }}
-                color="primary"
-              />
-            </ListItemIcon>
-            <ListItemText
-              id={labelId}
-              primary={value}
-              style={
-                checked.indexOf(value) !== -1
-                  ? { textDecoration: "line-through" }
-                  : { textDecoration: "none" }
-              }
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => handleDeleteTask(value)}
+            return (
+              <ListItem
+                key={`${index}-${value}`}
+                role={undefined}
+                dense
+                button
+                onClick={() => handleToggle(value)}
               >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        );
-      })}
+                <ListItemIcon>
+                  <Checkbox
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                    color="primary"
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  id={labelId}
+                  primary={value}
+                  style={
+                    checked.indexOf(value) !== -1
+                      ? { textDecoration: "line-through" }
+                      : { textDecoration: "none" }
+                  }
+                />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => {
+                      handleToggle(value);
+                      handleDeleteTask(value);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
     </List>
   );
 };
