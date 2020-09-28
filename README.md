@@ -6,3 +6,4 @@
 - [x] Remove task
 - [x] Set task completed
 - [ ] Filter tasks
+- [ ] Clear completed

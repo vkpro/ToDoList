@@ -4,7 +4,9 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
 import TasksList from "./TasksList";
 import TaskFilter from "./TaskFilter";
-import AddTask from "./AddTask";
+import AddTaskForm from "./AddTaskForm";
+import Tasks from "./ToDoModels";
+import { Task } from "./ToDoModels";
 
 import "./styles.css";
 
@@ -22,30 +24,55 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// type Task = { id: number, name: string; active: boolean }
-
 export default function App() {
-  const [tasks, setTasks] = React.useState<Array<string>>(["Create React App"]);
+  const [tasks, setTasks] = React.useState<Tasks>({
+    1: { id: 1, name: "Create React App", completed: true },
+    2: { id: 2, name: "Deploy App", completed: false }
+  });
   const classes = useStyles();
 
-  const addTask = (taskName: string) => {
-    if (taskName) {
-      setTasks([...tasks, taskName]);
+  const addTask = (TaskName: string) => {
+    if (TaskName) {
+      const TaskId: number = Date.now();
+      setTasks({
+        ...tasks,
+        [TaskId]: {
+          id: TaskId,
+          name: TaskName,
+          completed: false
+        }
+      });
     }
   };
 
-  const deleteTask = (taskName: string) => {
-    setTasks(tasks.filter((task) => task !== taskName));
+  const deleteTask = (taskId: number) => {
+    const { [taskId]: tmp, ...rest } = tasks;
+    setTasks(rest);
+  };
+
+  const toggleTask = (task: Task) => {
+    setTasks({
+      ...tasks,
+      [task.id]: {
+        id: task.id,
+        name: task.name,
+        completed: !task.completed
+      }
+    });
   };
 
   return (
     <div className="App">
       <h1>ToDo List</h1>
-      <AddTask handleAddTask={addTask} />
+      <AddTaskForm handleAddTask={addTask} />
       <TaskFilter />
       <div className={classes.root}>
         <Paper elevation={5}>
-          <TasksList tasks={tasks} handleDeleteTask={deleteTask} />
+          <TasksList
+            tasks={tasks}
+            handleDeleteTask={deleteTask}
+            handleCompleteTask={toggleTask}
+          />
         </Paper>
       </div>
     </div>

@@ -14,7 +14,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AddTask: React.FC<{ handleAddTask: Function }> = ({ handleAddTask }) => {
+const AddTaskForm: React.FC<{ handleAddTask: Function }> = ({
+  handleAddTask
+}) => {
   const classes = useStyles();
   const [taskName, setTaskName] = useState("");
 
@@ -56,4 +58,4 @@ const AddTask: React.FC<{ handleAddTask: Function }> = ({ handleAddTask }) => {
   );
 };
 
-export default AddTask;
+export default AddTaskForm;
