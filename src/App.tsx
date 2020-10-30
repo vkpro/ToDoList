@@ -1,6 +1,6 @@
 import * as React from "react";
-import Paper from "@material-ui/core/Paper";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+
+// import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
 import TasksList from "./TasksList";
 import TaskFilter from "./TaskFilter";
@@ -10,26 +10,30 @@ import { Task } from "./ToDoModels";
 
 import "./styles.css";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      "& > *": {
-        margin: theme.spacing(1),
-        width: theme.spacing(60)
-      }
-    }
-  })
-);
-
 export default function App() {
   const [tasks, setTasks] = React.useState<Tasks>({
     1: { id: 1, name: "Create React App", completed: true },
     2: { id: 2, name: "Deploy App", completed: false }
   });
-  const classes = useStyles();
+  const [taskList, setTaskList] = React.useState(["1", "2"]);
+
+  const filterTask = (todoFilter: string) => {
+    switch (todoFilter) {
+      case "ALL":
+        setTaskList(Object.keys(tasks).filter((key: any) => tasks[key]));
+        break;
+      case "ACTIVE":
+        setTaskList(
+          Object.keys(tasks).filter((key: any) => !tasks[key].completed)
+        );
+        break;
+      case "DONE":
+        setTaskList(
+          Object.keys(tasks).filter((key: any) => tasks[key].completed)
+        );
+        break;
+    }
+  };
 
   const addTask = (TaskName: string) => {
     if (TaskName) {
@@ -42,6 +46,7 @@ export default function App() {
           completed: false
         }
       });
+      setTaskList([...taskList, "" + TaskId]);
     }
   };
 
@@ -61,20 +66,25 @@ export default function App() {
     });
   };
 
+  const filteredTasks = Object.keys(tasks)
+    .filter((key) => taskList.includes(key))
+    .reduce((obj, key) => {
+      return {
+        ...obj,
+        [key]: tasks[key as any]
+      };
+    }, {});
+
   return (
     <div className="App">
       <h1>ToDo List</h1>
       <AddTaskForm handleAddTask={addTask} />
-      <TaskFilter />
-      <div className={classes.root}>
-        <Paper elevation={5}>
-          <TasksList
-            tasks={tasks}
-            handleDeleteTask={deleteTask}
-            handleCompleteTask={toggleTask}
-          />
-        </Paper>
-      </div>
+      <TaskFilter filterTask={filterTask} />
+      <TasksList
+        tasks={filteredTasks}
+        handleDeleteTask={deleteTask}
+        handleCompleteTask={toggleTask}
+      />
     </div>
   );
 }

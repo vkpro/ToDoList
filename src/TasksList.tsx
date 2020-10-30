@@ -8,6 +8,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Paper from "@material-ui/core/Paper";
 
 import Tasks from "./ToDoModels";
 
@@ -41,55 +42,59 @@ const TasksList: React.FC<TasksListProps> = ({
   const classes = useStyles();
 
   return (
-    <List className={classes.root}>
-      {Object.keys(tasks).length === 0
-        ? "No tasks"
-        : Object.keys(tasks).map((taskId: string) => {
-            const task = tasks[taskId as any];
-            const labelId = `checkbox-list-label-${task.name}`;
+    <div className={classes.root}>
+      <Paper elevation={5}>
+        <List className={classes.root}>
+          {Object.keys(tasks).length === 0
+            ? "No tasks"
+            : Object.keys(tasks).map((taskId: string) => {
+                const task = tasks[taskId as any];
+                const labelId = `checkbox-list-label-${task.name}`;
 
-            return (
-              <ListItem
-                key={`${task.id}`}
-                role={undefined}
-                dense
-                button
-                onClick={() => handleCompleteTask(task)}
-              >
-                <ListItemIcon>
-                  <Checkbox
-                    checked={task.completed}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ "aria-labelledby": labelId }}
-                    color="primary"
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  id={labelId}
-                  primary={task.name}
-                  style={
-                    task.completed
-                      ? { textDecoration: "line-through" }
-                      : { textDecoration: "none" }
-                  }
-                />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => {
-                      handleCompleteTask(task);
-                      handleDeleteTask(task.id);
-                    }}
+                return (
+                  <ListItem
+                    key={`${task.id}`}
+                    role={undefined}
+                    dense
+                    button
+                    onClick={() => handleCompleteTask(task)}
                   >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
-    </List>
+                    <ListItemIcon>
+                      <Checkbox
+                        checked={task.completed}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ "aria-labelledby": labelId }}
+                        color="primary"
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      id={labelId}
+                      primary={task.name}
+                      style={
+                        task.completed
+                          ? { textDecoration: "line-through" }
+                          : { textDecoration: "none" }
+                      }
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => {
+                          handleCompleteTask(task);
+                          handleDeleteTask(task.id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })}
+        </List>
+      </Paper>
+    </div>
   );
 };
 
