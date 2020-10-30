@@ -1,49 +1,90 @@
 import * as React from "react";
-import Paper from "@material-ui/core/Paper";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+
+// import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
 import TasksList from "./TasksList";
-import AddTask from "./AddTask";
+import TaskFilter from "./TaskFilter";
+import AddTaskForm from "./AddTaskForm";
+import Tasks from "./ToDoModels";
+import { Task } from "./ToDoModels";
 
 import "./styles.css";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      "& > *": {
-        margin: theme.spacing(1),
-        width: theme.spacing(60)
-      }
-    }
-  })
-);
-
 export default function App() {
-  const [tasks, setTasks] = React.useState<Array<string>>(["Create React App"]);
-  const classes = useStyles();
+  const [tasks, setTasks] = React.useState<Tasks>({
+    1: { id: 1, name: "Create React App", completed: true },
+    2: { id: 2, name: "Deploy App", completed: false }
+  });
+  const [taskList, setTaskList] = React.useState(["1", "2"]);
 
-  const addTask = (taskName: string) => {
-    if (taskName) {
-      setTasks([...tasks, taskName]);
+  const filterTask = (todoFilter: string) => {
+    switch (todoFilter) {
+      case "ALL":
+        setTaskList(Object.keys(tasks).filter((key: any) => tasks[key]));
+        break;
+      case "ACTIVE":
+        setTaskList(
+          Object.keys(tasks).filter((key: any) => !tasks[key].completed)
+        );
+        break;
+      case "DONE":
+        setTaskList(
+          Object.keys(tasks).filter((key: any) => tasks[key].completed)
+        );
+        break;
     }
   };
 
-  const deleteTask = (taskName: string) => {
-    setTasks(tasks.filter((task) => task !== taskName));
+  const addTask = (TaskName: string) => {
+    if (TaskName) {
+      const TaskId: number = Date.now();
+      setTasks({
+        ...tasks,
+        [TaskId]: {
+          id: TaskId,
+          name: TaskName,
+          completed: false
+        }
+      });
+      setTaskList([...taskList, "" + TaskId]);
+    }
   };
+
+  const deleteTask = (taskId: number) => {
+    const { [taskId]: tmp, ...rest } = tasks;
+    setTasks(rest);
+  };
+
+  const toggleTask = (task: Task) => {
+    setTasks({
+      ...tasks,
+      [task.id]: {
+        id: task.id,
+        name: task.name,
+        completed: !task.completed
+      }
+    });
+  };
+
+  const filteredTasks = Object.keys(tasks)
+    .filter((key) => taskList.includes(key))
+    .reduce((obj, key) => {
+      return {
+        ...obj,
+        [key]: tasks[key as any]
+      };
+    }, {});
 
   return (
     <div className="App">
       <h1>ToDo List</h1>
-      <AddTask handleAddTask={addTask} />
-      <div className={classes.root}>
-        <Paper elevation={5}>
-          <TasksList tasks={tasks} handleDeleteTask={deleteTask} />
-        </Paper>
-      </div>
+      <AddTaskForm handleAddTask={addTask} />
+      <TaskFilter filterTask={filterTask} />
+      <TasksList
+        tasks={filteredTasks}
+        handleDeleteTask={deleteTask}
+        handleCompleteTask={toggleTask}
+      />
     </div>
   );
 }
