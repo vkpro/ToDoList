@@ -5,5 +5,5 @@
 - [x] Add task
 - [x] Remove task
 - [x] Set task completed
-- [ ] Filter tasks
+- [x] Filter tasks
 - [ ] Clear completed
